@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./honestWeekStyle.css";
 import { v4 } from "uuid";
 import { ArrowLeft } from "./ArrowLeft";
 import { ArrowRight } from "./ArrowRight";
 
-export const HonestWeekPicker = () => {
+export const HonestWeekPicker = ({ onChange }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [week, setWeek] = useState({
@@ -14,6 +14,10 @@ export const HonestWeekPicker = () => {
     lastDay: new Date().setDate(new Date().getDate() - new Date().getDay() + 7)
   });
 
+  useEffect(() => {
+    onChange && onChange(week);
+  }, [week]);
+
   const isLeapYear = () => {
     let leapYear = new Date(new Date().getFullYear(), 1, 29);
     return leapYear.getDate() == 29;
@@ -22,7 +26,7 @@ export const HonestWeekPicker = () => {
   const convertDate = (date) => {
     let dt = new Date(date);
 
-    return `${dt.getDate()}.${dt.getMonth() + 1}.${dt.getFullYear()}`;
+    return `${dt.getDate()}.${dt.getMonth() + 1}.${dt.getFullYear()}.`;
   };
 
   const handleClick = (e) => {
@@ -37,7 +41,6 @@ export const HonestWeekPicker = () => {
     );
 
     setWeek({ firstDay, lastDay });
-    console.log({ firstDay, lastDay });
   };
 
   const months = [
@@ -116,7 +119,7 @@ export const HonestWeekPicker = () => {
   const displayMonth = () => {
     let displayDate = new Date(date);
 
-    return `${months[displayDate.getMonth()]} ${displayDate.getFullYear()}`;
+    return `${months[displayDate.getMonth()]} ${displayDate.getFullYear()}.`;
   };
 
   return (
@@ -142,9 +145,9 @@ export const HonestWeekPicker = () => {
           </div>
           <div className="numbers-container">
             <div className="single-number day">Mon</div>
-            <div className="single-number day">Tues</div>
+            <div className="single-number day">Tue</div>
             <div className="single-number day">Wed</div>
-            <div className="single-number day">Thur</div>
+            <div className="single-number day">Thu</div>
             <div className="single-number day">Fri</div>
             <div className="single-number day">Sat</div>
             <div className="single-number day">Sun</div>

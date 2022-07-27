@@ -8,4 +8,9 @@
   font-family: sans-serif;
   text-align: center;
   padding: 3rem;
+  display: flex;
+  gap: 22rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
