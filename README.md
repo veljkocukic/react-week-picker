@@ -1,2 +1,3 @@
 # react-week-picker
-Created with CodeSandbox
+
+Use this code and modify it for your own purpose, no credits required
