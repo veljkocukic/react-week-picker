@@ -13,7 +13,6 @@ export default function App() {
 
   const onChange = (week) => {
     setWeek(week);
-    console.log(week);
   };
 
   return (

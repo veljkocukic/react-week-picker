@@ -66,9 +66,9 @@
   background-color: #ff9900;
 }
 
-.empty {
+.other-month {
   background: none;
-  color: none;
+  color: #c3c0cc;
 }
 
 .day {
@@ -80,10 +80,11 @@
   cursor: pointer;
   width: 25px;
   height: 25px;
-  transition: 0.3s ease;
+  transition: 0.2s ease-in;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 50%;
 }
 
 .arrow-container svg {
@@ -92,7 +93,7 @@
 
 .arrow-container:hover {
   background-color: #ff9900;
-  border-radius: 50%;
+  border-radius: 15%;
 }
 
 .arrow-container:hover svg {

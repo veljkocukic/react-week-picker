@@ -30,8 +30,17 @@ export const HonestWeekPicker = ({ onChange }) => {
   };
 
   const handleClick = (e) => {
-    setDate(new Date(date.setDate(e.target.id)));
-    let localDate = new Date(date.setDate(e.target.id));
+    let localDate;
+    if (e.target.id.includes("prev")) {
+      localDate = new Date(date.setDate(1));
+      setDate(new Date(date.setDate(1)));
+    } else if (e.target.id.includes("next")) {
+      localDate = new Date(date.setDate(30));
+      setDate(new Date(date.setDate(30)));
+    } else {
+      localDate = new Date(date.setDate(e.target.id));
+      setDate(new Date(date.setDate(e.target.id)));
+    }
 
     const firstDay = new Date(
       localDate.setDate(localDate.getDate() - localDate.getDay() + 1)
@@ -97,11 +106,69 @@ export const HonestWeekPicker = ({ onChange }) => {
     const displayDate = new Date(date).setDate(1);
     let dayInTheWeek = new Date(displayDate).getDay();
 
-    let empty = [];
-    for (let i = 1; i < dayInTheWeek; i++) {
-      empty.push(<div key={v4()} id={i} className="single-number empty"></div>);
+    let prevMonth = [];
+    let prevMonthDays = new Date(date).getMonth();
+    if (prevMonthDays === 0) {
+      prevMonthDays = 12;
     }
-    return [...empty, ...ar];
+    for (let i = dayInTheWeek; i > 1; i--) {
+      let previousMonth = new Date(date).setMonth(
+        new Date(date).getMonth() - 1
+      );
+      let currentDate = new Date(previousMonth).setDate(
+        days[prevMonthDays] - i + 2
+      );
+      let cName = "single-number other-month";
+      let currentTime = new Date(currentDate).getTime();
+      let firstTime = new Date(week.firstDay).getTime();
+      let endTime = new Date(week.lastDay).getTime();
+      if (currentTime >= firstTime && currentTime <= endTime) {
+        cName = "single-number selected-week";
+      }
+
+      prevMonth.push(
+        <div
+          onClick={handleClick}
+          key={v4()}
+          id={"prev-" + i}
+          className={cName}
+        >
+          {days[prevMonthDays] - i + 2}
+        </div>
+      );
+    }
+
+    let nextMonth = [];
+    let fullDays = 35;
+    if ([...prevMonth, ...ar].length > 35) {
+      fullDays = 42;
+    }
+
+    for (let i = 1; i <= fullDays - [...prevMonth, ...ar].length; i++) {
+      let previousMonth = new Date(date).setMonth(
+        new Date(date).getMonth() + 1
+      );
+      let currentDate = new Date(previousMonth).setDate(i);
+      let cName = "single-number other-month";
+      let currentTime = new Date(currentDate).getTime();
+      let firstTime = new Date(week.firstDay).getTime();
+      let endTime = new Date(week.lastDay).getTime();
+      if (currentTime >= firstTime && currentTime <= endTime) {
+        cName = "single-number selected-week";
+      }
+
+      nextMonth.push(
+        <div
+          onClick={handleClick}
+          key={v4()}
+          id={"next-" + i}
+          className={cName}
+        >
+          {i}
+        </div>
+      );
+    }
+    return [...prevMonth, ...ar, ...nextMonth];
   };
 
   const handleDate = (next) => {
