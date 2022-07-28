@@ -38,8 +38,8 @@ export const HonestWeekPicker = ({ onChange }) => {
       localDate = new Date(date.setDate(30));
       setDate(new Date(date.setDate(30)));
     } else {
-      localDate = new Date(date.setDate(e.target.id));
-      setDate(new Date(date.setDate(e.target.id)));
+      localDate = new Date(date.setDate(e.target.id - 1));
+      setDate(new Date(date.setDate(e.target.id - 1)));
     }
 
     const firstDay = new Date(
