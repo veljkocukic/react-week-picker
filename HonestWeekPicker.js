@@ -172,21 +172,9 @@ export const HonestWeekPicker = ({ onChange }) => {
   };
 
   const handleDate = (next) => {
-    if (next) {
-      let localDate = new Date(date);
-      localDate.setMonth(localDate.getMonth() + 1);
-      setDate(new Date(localDate));
-      return;
-    }
     let localDate = new Date(date);
-    localDate.setMonth(localDate.getMonth() - 1);
+    localDate.setMonth(localDate.getMonth() + (next ? 1 : -1));
     setDate(new Date(localDate));
-  };
-
-  const displayMonth = () => {
-    let displayDate = new Date(date);
-
-    return `${months[displayDate.getMonth()]} ${displayDate.getFullYear()}.`;
   };
 
   return (
@@ -205,7 +193,7 @@ export const HonestWeekPicker = ({ onChange }) => {
             <div onClick={() => handleDate()} className="arrow-container">
               {ArrowLeft}
             </div>
-            {displayMonth()}
+            {`${months[date.getMonth()]} ${date.getFullYear()}.`}
             <div onClick={() => handleDate(true)} className="arrow-container">
               {ArrowRight}
             </div>
