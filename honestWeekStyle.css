@@ -100,3 +100,8 @@
   stroke: #fff;
   fill: #fff;
 }
+
+.other-month {
+  background: none;
+  color: #c3c0cc;
+}

@@ -3,15 +3,15 @@ import "./honestWeekStyle.css";
 import { v4 } from "uuid";
 import { ArrowLeft } from "./ArrowLeft";
 import { ArrowRight } from "./ArrowRight";
+import { addMonths, endOfWeek, startOfWeek, subMonths } from "date-fns";
+import { getDaysInMonth } from "date-fns/esm";
 
 export const HonestWeekPicker = ({ onChange }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [week, setWeek] = useState({
-    firstDay: new Date().setDate(
-      new Date().getDate() - new Date().getDay() + 1
-    ),
-    lastDay: new Date().setDate(new Date().getDate() - new Date().getDay() + 7)
+    firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }),
+    lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })
   });
 
   useEffect(() => {
@@ -35,20 +35,14 @@ export const HonestWeekPicker = ({ onChange }) => {
       localDate = new Date(date.setDate(1));
       setDate(new Date(date.setDate(1)));
     } else if (e.target.id.includes("next")) {
-      localDate = new Date(date.setDate(30));
-      setDate(new Date(date.setDate(30)));
+      localDate = new Date(date.setDate(getDaysInMonth(date)));
+      setDate(new Date(date.setDate(getDaysInMonth(date))));
     } else {
-      localDate = new Date(date.setDate(e.target.id - 1));
-      setDate(new Date(date.setDate(e.target.id - 1)));
+      localDate = new Date(date.setDate(e.target.id));
+      setDate(new Date(date.setDate(e.target.id)));
     }
-
-    const firstDay = new Date(
-      localDate.setDate(localDate.getDate() - localDate.getDay() + 1)
-    );
-    const lastDay = new Date(
-      localDate.setDate(localDate.getDate() - localDate.getDay() + 7)
-    );
-
+    const firstDay = startOfWeek(localDate, { weekStartsOn: 1 });
+    const lastDay = endOfWeek(localDate, { weekStartsOn: 1 });
     setWeek({ firstDay, lastDay });
   };
 
@@ -105,7 +99,9 @@ export const HonestWeekPicker = ({ onChange }) => {
 
     const displayDate = new Date(date).setDate(1);
     let dayInTheWeek = new Date(displayDate).getDay();
-
+    if (dayInTheWeek < 1) {
+      dayInTheWeek = 7;
+    }
     let prevMonth = [];
     let prevMonthDays = new Date(date).getMonth();
     if (prevMonthDays === 0) {
@@ -145,15 +141,16 @@ export const HonestWeekPicker = ({ onChange }) => {
     }
 
     for (let i = 1; i <= fullDays - [...prevMonth, ...ar].length; i++) {
-      let previousMonth = new Date(date).setMonth(
-        new Date(date).getMonth() + 1
-      );
-      let currentDate = new Date(previousMonth).setDate(i);
       let cName = "single-number other-month";
-      let currentTime = new Date(currentDate).getTime();
-      let firstTime = new Date(week.firstDay).getTime();
-      let endTime = new Date(week.lastDay).getTime();
-      if (currentTime >= firstTime && currentTime <= endTime) {
+      const lastDay = week.lastDay.getTime();
+      const lastDayOfMonth = new Date(
+        new Date(date).setDate(getDaysInMonth(date))
+      );
+
+      if (
+        lastDayOfMonth.getTime() <= lastDay &&
+        week.firstDay.getMonth() == lastDayOfMonth.getMonth()
+      ) {
         cName = "single-number selected-week";
       }
 
@@ -173,7 +170,11 @@ export const HonestWeekPicker = ({ onChange }) => {
 
   const handleDate = (next) => {
     let localDate = new Date(date);
-    localDate.setMonth(localDate.getMonth() + (next ? 1 : -1));
+    if (next) {
+      localDate = addMonths(localDate, 1);
+    } else {
+      localDate = subMonths(localDate, 1);
+    }
     setDate(new Date(localDate));
   };
 
